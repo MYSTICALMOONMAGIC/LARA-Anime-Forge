@@ -27,14 +27,14 @@ type DownloadStepSpec = {
 
 // Fun loading messages
 const INSTALL_MESSAGES = [
-  "Downloading model weights...",
-  "Teaching AI to dream in 4K...",
-  "Loading neural pathways...",
-  "Calibrating inference engine...",
-  "Almost there...",
-  "Unpacking the magic...",
-  "Configuring parameters...",
-  "Finalizing installation..."
+  "Pobieranie wag modeli...",
+  "Uczenie AI, jak śnić w 4K...",
+  "Ładowanie ścieżek neuronowych...",
+  "Kalibrowanie silnika generowania...",
+  "Już prawie gotowe...",
+  "Rozpakowywanie magii...",
+  "Konfigurowanie parametrów...",
+  "Kończenie instalacji..."
 ]
 
 function uniqueCpIds(cpIds: readonly ModelCheckpointID[]): ModelCheckpointID[] {
@@ -136,7 +136,7 @@ export function LaunchGate({
       const text = await window.electronAPI.fetchLicenseText()
       setLicenseText(text)
     } catch (e) {
-      setLicenseError(e instanceof Error ? e.message : 'Failed to fetch license text.')
+      setLicenseError(e instanceof Error ? e.message : 'Nie udało się wczytać treści licencji.')
     }
   }
 
@@ -180,7 +180,7 @@ export function LaunchGate({
       setDownloadSessionId(downloadData.sessionId)
       return
     }
-    throw new Error('Unexpected response while starting model download.')
+    throw new Error('Otrzymano nieoczekiwaną odpowiedź podczas rozpoczynania pobierania modelu.')
   }, [])
 
   // Initialize
@@ -246,7 +246,7 @@ export function LaunchGate({
 
       if (progress.status === 'error') {
         downloadQueueRef.current = []
-        setDownloadError(progress.error || 'Download failed.')
+        setDownloadError(progress.error || 'Pobieranie nie powiodło się.')
       } else if (progress.status === 'complete') {
         const nextStep = downloadQueueRef.current.shift() ?? null
         if (nextStep) {
@@ -298,7 +298,7 @@ export function LaunchGate({
       await startDownloadStep(downloadSteps[0])
     } catch (e) {
       logger.error(`Download start error: ${e}`)
-      setDownloadError(e instanceof Error ? e.message : 'Failed to start model download.')
+      setDownloadError(e instanceof Error ? e.message : 'Nie udało się rozpocząć pobierania modelu.')
     }
   }
 
@@ -324,7 +324,7 @@ export function LaunchGate({
         }
         setCurrentStep('location')
       } catch (e) {
-        setActionError(e instanceof Error ? e.message : 'Failed to accept license.')
+        setActionError(e instanceof Error ? e.message : 'Nie udało się zaakceptować licencji.')
       } finally {
         setIsActionPending(false)
       }
@@ -345,7 +345,7 @@ export function LaunchGate({
     try {
       await onComplete()
     } catch (e) {
-      setActionError(e instanceof Error ? e.message : 'Failed to complete setup.')
+      setActionError(e instanceof Error ? e.message : 'Nie udało się zakończyć konfiguracji.')
     } finally {
       setIsActionPending(false)
     }
@@ -353,10 +353,10 @@ export function LaunchGate({
 
   // Get button text
   const getNextButtonText = () => {
-    if (currentStep === 'license') return licenseOnly ? 'Accept' : 'Next'
-    if (currentStep === 'location') return 'Install'
-    if (currentStep === 'complete') return 'Finish'
-    return 'Continue'
+    if (currentStep === 'license') return licenseOnly ? 'Akceptuj' : 'Dalej'
+    if (currentStep === 'location') return 'Zainstaluj'
+    if (currentStep === 'complete') return 'Zakończ'
+    return 'Kontynuuj'
   }
 
   // Check if next button should be disabled
@@ -424,10 +424,10 @@ export function LaunchGate({
                 fontWeight: 700,
                 marginBottom: 6
               }}>
-                LTX-2 Model License
+                Licencja modelu LTX-2
               </h2>
               <p style={{ color: '#a0a0a0', fontSize: 14, marginBottom: 16 }}>
-                The LTX-2 model is subject to the following license agreement. Please review and accept before downloading.
+                Model LTX-2 podlega poniższej umowie licencyjnej. Przeczytaj ją i zaakceptuj przed rozpoczęciem pobierania.
               </p>
 
               <div style={{
@@ -471,7 +471,7 @@ export function LaunchGate({
                           color: '#ffffff',
                         }}
                       >
-                        Retry
+                        Spróbuj ponownie
                       </button>
                     </div>
                   ) : licenseText === null ? (
@@ -485,7 +485,7 @@ export function LaunchGate({
                       <svg width="20" height="20" viewBox="0 0 24 24" style={{ animation: 'spin 1s linear infinite' }}>
                         <circle cx="12" cy="12" r="10" stroke="#6D28D9" strokeWidth="3" fill="none" strokeDasharray="31.4 31.4" strokeLinecap="round" />
                       </svg>
-                      <span style={{ color: '#a0a0a0', fontSize: 13 }}>Loading license...</span>
+                      <span style={{ color: '#a0a0a0', fontSize: 13 }}>Wczytywanie licencji...</span>
                     </div>
                   ) : (
                     <div style={{
@@ -532,13 +532,13 @@ export function LaunchGate({
                       flexShrink: 0
                     }}
                   />
-                  <span>I have read and agree to the LTX-2 Community License Agreement</span>
+                  <span>Akceptuję warunki licencji społecznościowej LTX-2</span>
                 </label>
               </div>
             </div>
           )}
 
-          {/* Step 2: Choose Location */}
+          {/* Step 2: Wybierz lokalizację */}
           {currentStep === 'location' && (
             <div style={{ animation: 'fadeIn 0.25s ease', overflowY: 'auto', flex: 1, minHeight: 0 }}>
               <h2 style={{
@@ -547,10 +547,10 @@ export function LaunchGate({
                 fontWeight: 700,
                 marginBottom: 6
               }}>
-                Choose Location
+                Wybierz lokalizację
               </h2>
               <p style={{ color: '#a0a0a0', fontSize: 14, marginBottom: 24 }}>
-                Select where to install the model files.
+                Wybierz folder, w którym zostaną zainstalowane pliki modeli.
               </p>
 
               <div style={{
@@ -593,7 +593,7 @@ export function LaunchGate({
                       transition: 'all 0.2s ease'
                     }}
                   >
-                    Browse
+                    Przeglądaj
                   </button>
                 </div>
 
@@ -604,7 +604,7 @@ export function LaunchGate({
                   color: '#a0a0a0',
                   marginTop: 10
                 }}>
-                  <span>Available: <strong style={{ color: '#fff' }}>{availableSpace}</strong></span>
+                  <span>Dostępne miejsce: <strong style={{ color: '#fff' }}>{availableSpace}</strong></span>
                 </div>
               </div>
 
@@ -624,7 +624,7 @@ export function LaunchGate({
                       marginLeft: 8,
                       fontWeight: 400
                     }}>
-                      Optional - Saves ~25 GB download
+                      Opcjonalny • oszczędza pobieranie około 25 GB
                     </span>
                   </label>
                 </div>
@@ -632,7 +632,7 @@ export function LaunchGate({
                   type="password"
                   value={ltxApiKey}
                   onChange={(e) => setLtxApiKey(e.target.value)}
-                  placeholder="Enter API key to skip text encoder download..."
+                  placeholder="Wpisz klucz API, aby pominąć pobieranie kodera tekstu..."
                   style={{
                     width: '100%',
                     background: '#1a1a1a',
@@ -647,11 +647,11 @@ export function LaunchGate({
                 <p style={{ fontSize: 11, color: '#888', marginTop: 8 }}>
                   {ltxApiKey ? (
                     <span style={{ color: '#6D28D9' }}>
-                      ✓ Text encoder download will be skipped (using API instead)
+                      ✓ Pobieranie kodera tekstu zostanie pominięte, ponieważ użyte zostanie API
                     </span>
                   ) : (
-                    'If you have an LTX API key, entering it here skips the 25 GB text encoder download. ' +
-                    'The API provides faster text encoding (~1s vs 23s local).'
+                    'Wpisanie klucza LTX API pozwala pominąć pobieranie kodera tekstu o rozmiarze około 25 GB. ' +
+                    'API zapewnia szybsze kodowanie tekstu, około 1 sekundy zamiast około 23 sekund lokalnie.'
                   )}
                 </p>
               </div>
@@ -666,25 +666,25 @@ export function LaunchGate({
               }}>
                 <div style={{ marginBottom: 8 }}>
                   <label style={{ fontSize: 13, fontWeight: 600, color: '#ffffff' }}>
-                    HuggingFace Account
+                    Konto Hugging Face
                     <span style={{
                       fontSize: 11,
                       color: hfAuthStatus === 'authenticated' ? '#22c55e' : '#f59e0b',
                       marginLeft: 8,
                       fontWeight: 400
                     }}>
-                      {hfAuthStatus === 'authenticated' ? 'Signed in' : 'Required'}
+                      {hfAuthStatus === 'authenticated' ? 'Zalogowano' : 'Wymagane'}
                     </span>
                   </label>
                 </div>
                 {hfAuthStatus === 'authenticated' ? (
                   <p style={{ fontSize: 12, color: '#22c55e' }}>
-                    ✓ Authenticated — ready to download models.
+                    ✓ Uwierzytelniono. Można pobierać modele.
                   </p>
                 ) : (
                   <>
                     <p style={{ fontSize: 11, color: '#888', marginBottom: 12 }}>
-                      Sign in to HuggingFace to download model files.
+                      Zaloguj się do Hugging Face, aby pobrać pliki modeli.
                     </p>
                     <button
                       onClick={startHuggingFaceLogin}
@@ -702,14 +702,14 @@ export function LaunchGate({
                         opacity: hfAuthPolling ? 0.7 : 1
                       }}
                     >
-                      {hfAuthPolling ? 'Waiting for sign in...' : 'Sign in with HuggingFace'}
+                      {hfAuthPolling ? 'Oczekiwanie na logowanie...' : 'Zaloguj się przez Hugging Face'}
                     </button>
                   </>
                 )}
               </div>
               )}
 
-              {/* Model Access Check */}
+              {/* Dostęp do modeli Check */}
               {hfAuthStatus === 'authenticated' && Object.keys(accessMap).length > 0 && !allAuthorized && (
                 <div ref={modelAccessRef} style={{
                   marginTop: 24,
@@ -719,14 +719,14 @@ export function LaunchGate({
                 }}>
                   <div style={{ marginBottom: 8 }}>
                     <label style={{ fontSize: 13, fontWeight: 600, color: '#ffffff' }}>
-                      Model Access
+                      Dostęp do modeli
                       <span style={{ fontSize: 11, color: '#f59e0b', marginLeft: 8, fontWeight: 400 }}>
-                        Action required
+                        Wymagane działanie
                       </span>
                     </label>
                   </div>
                   <p style={{ fontSize: 11, color: '#888', marginBottom: 12 }}>
-                    Some models require you to accept their license on HuggingFace before downloading.
+                    Niektóre modele wymagają zaakceptowania licencji w serwisie Hugging Face przed pobraniem.
                   </p>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                     {Object.entries(accessMap)
@@ -757,7 +757,7 @@ export function LaunchGate({
                               transition: 'all 0.2s ease',
                             }}
                           >
-                            Request access
+                            Poproś o dostęp
                           </button>
                         </div>
                       ))}
@@ -812,7 +812,7 @@ export function LaunchGate({
                   textShadow: '0 1px 4px rgba(0,0,0,0.9)',
                   zIndex: 10
                 }}>
-                  Generated by PongFlongo
+                  Wygenerowano przez PongFlongo
                 </div>
               </div>
 
@@ -856,7 +856,7 @@ export function LaunchGate({
                         color: '#ffffff',
                       }}
                     >
-                      Back
+                      Wstecz
                     </button>
                     <button
                       onClick={retryInstallation}
@@ -871,7 +871,7 @@ export function LaunchGate({
                         color: '#ffffff',
                       }}
                     >
-                      Retry
+                      Spróbuj ponownie
                     </button>
                   </div>
                 </div>
@@ -885,7 +885,7 @@ export function LaunchGate({
                   marginBottom: 8
                 }}>
                   <span style={{ fontSize: 13, fontWeight: 500 }}>
-                    {totalProgress > 85 ? 'Installing...' : 'Downloading...'}
+                    {totalProgress > 85 ? 'Instalowanie...' : 'Pobieranie...'}
                   </span>
                   <span style={{ fontSize: 13, color: '#A98BD9', fontWeight: 600 }}>
                     {Math.round(totalProgress)}%
@@ -938,7 +938,7 @@ export function LaunchGate({
                     )}
                     {runningDownloadProgress && runningDownloadProgress.speed_bytes_per_sec > 0 && (
                       <span>
-                        ETA: {getTimeRemaining()}
+                        Pozostało: {getTimeRemaining()}
                       </span>
                     )}
                   </div>
@@ -951,7 +951,7 @@ export function LaunchGate({
                     fontSize: 11,
                     color: '#666'
                   }}>
-                    File {runningDownloadProgress.completed_files.length + 1} of {runningDownloadProgress.all_files.length}
+                    Plik {runningDownloadProgress.completed_files.length + 1} z {runningDownloadProgress.all_files.length}
                   </div>
                 )}
               </>
@@ -993,10 +993,10 @@ export function LaunchGate({
                 fontWeight: 700,
                 marginBottom: 8
               }}>
-                Ready to Create
+                Gotowe do tworzenia
               </h2>
               <p style={{ color: '#a0a0a0', fontSize: 14, maxWidth: 320 }}>
-                LTX Video is installed. Start generating.
+                Modele LTX zostały zainstalowane. Możesz rozpocząć tworzenie.
               </p>
 
               {/* Install Summary */}
@@ -1014,7 +1014,7 @@ export function LaunchGate({
                   padding: '8px 0',
                   fontSize: 13
                 }}>
-                  <span style={{ color: '#a0a0a0' }}>Location</span>
+                  <span style={{ color: '#a0a0a0' }}>Lokalizacja</span>
                   <span style={{ fontWeight: 500, maxWidth: 150, overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     {installPath.split('\\').pop() || installPath}
                   </span>
@@ -1032,7 +1032,7 @@ export function LaunchGate({
           justifyContent: 'space-between',
           alignItems: 'center'
         }}>
-          <div style={{ fontSize: 11, color: '#666' }}>© 2026 Lightricks</div>
+          <div style={{ fontSize: 11, color: '#666' }}>LARA Anime Forge • na bazie LTX Desktop • Apache-2.0</div>
 
           <div style={{ display: 'flex', gap: 10 }}>
             {/* Next/Install/Finish Button */}
