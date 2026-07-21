@@ -12,13 +12,12 @@ import { initSessionLog } from './logging-management'
 import { stopPythonBackend } from './python-backend'
 import { initAutoUpdater } from './updater'
 import { createWindow, getMainWindow } from './window'
-import { sendAnalyticsEvent } from './analytics'
 
 function logAppVersion(): void {
   if (!app.isPackaged) {
-    logger.info('[LTX Desktop] Running in development mode')
+    logger.info('[LARA Anime Forge] Running in development mode')
   } else {
-    logger.info(`[LTX Desktop] Version ${app.getVersion()}`)
+    logger.info(`[LARA Anime Forge] Version ${app.getVersion()}`)
   }
 }
 
@@ -38,29 +37,32 @@ if (!gotLock) {
 
   app.on('second-instance', () => {
     const mainWindow = getMainWindow()
+
     if (mainWindow) {
       if (mainWindow.isMinimized()) {
         mainWindow.restore()
       }
+
       if (!mainWindow.isVisible()) {
         mainWindow.show()
       }
+
       mainWindow.focus()
       return
     }
+
     if (app.isReady()) {
       createWindow()
     }
   })
 
-  app.whenReady().then(async () => {
+  app.whenReady().then(() => {
     setupCSP()
     createWindow()
     initAutoUpdater()
-    // Python setup + backend start are now driven by the renderer via IPC
 
-    // Fire analytics event (no-op if user hasn't opted in)
-    void sendAnalyticsEvent('ltxdesktop_app_launched')
+    // Konfiguracja Pythona i uruchamianie backendu
+    // są obsługiwane przez interfejs aplikacji.
   })
 
   app.on('window-all-closed', () => {
